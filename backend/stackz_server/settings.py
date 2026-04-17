@@ -57,7 +57,11 @@ MIDDLEWARE = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'user': '100/day',
+        'anon': '5/minute',
+    }
 }
 
 ROOT_URLCONF = 'stackz_server.urls'

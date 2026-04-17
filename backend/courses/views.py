@@ -1,4 +1,5 @@
-from rest_framework.decorators import api_view,permission_classes
+from rest_framework.decorators import api_view,permission_classes,throttle_classes
+from rest_framework.throttling import UserRateThrottle
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST,HTTP_200_OK,HTTP_500_INTERNAL_SERVER_ERROR
@@ -7,6 +8,7 @@ from .models import Course,Module
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
 def get_course_data(request,course_id):
     try:
         course = Course.objects.get(id=course_id)
@@ -17,6 +19,7 @@ def get_course_data(request,course_id):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
 def list_courses(request):
     courses = Course.objects.all()
     serializer = CourseSerializer(courses,many=True)
@@ -25,6 +28,7 @@ def list_courses(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
 def list_modules(request,course_id):
     try:
         course = Course.objects.get(id=course_id)
@@ -37,6 +41,7 @@ def list_modules(request,course_id):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
 def get_module_data(request,module_id):
     try:
         module = Module.objects.get(id=module_id)

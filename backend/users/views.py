@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
-from rest_framework.decorators import api_view,permission_classes
+from rest_framework.decorators import api_view,permission_classes,throttle_classes
+from rest_framework.throttling import UserRateThrottle, AnonRateThrottle
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED,HTTP_200_OK,HTTP_204_NO_CONTENT,HTTP_400_BAD_REQUEST,HTTP_404_NOT_FOUND
@@ -20,6 +21,7 @@ def get_tokens_for_user(user):
     }
 
 @api_view(['POST'])
+@throttle_classes([AnonRateThrottle,UserRateThrottle])
 def register_user(request):
     serializer = RegisterSerializer(data=request.data)
     if serializer.is_valid():
@@ -28,6 +30,7 @@ def register_user(request):
     return Response(serializer.errors,status=HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+@throttle_classes([AnonRateThrottle,UserRateThrottle])
 def login_user(request):
     try:
         username = request.data['username']
@@ -43,6 +46,7 @@ def login_user(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
 def get_user_profile(request):
     serializer = UserProfileSerializer(request.user)
     return Response(serializer.data,status=HTTP_200_OK)
@@ -50,6 +54,7 @@ def get_user_profile(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
 def update_progress(request):
     try:
         course_id = request.data['course_id']
@@ -76,6 +81,7 @@ def update_progress(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
+@throttle_classes([UserRateThrottle])
 def get_course_progress(request):
     try:
         user_progress = UserProgress.objects.get(user=request.user,course_id=request.data['course_id'])
