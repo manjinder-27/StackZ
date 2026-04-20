@@ -13,9 +13,18 @@ class ModuleSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ['id','name','category','desc']
+        fields = ['id','name','desc','author']
         extra_kwargs = {
             'id':{'read_only':True},
             'name':{'read_only':True},
-            'category':{'read_only':True}
         }
+
+class NewCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ['name','desc','author']
+
+class NewModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Module
+        fields = ['title','index','is_quiz']

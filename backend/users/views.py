@@ -37,7 +37,7 @@ def login_user(request):
         password = request.data['password']
     except Exception as e:
         print(e)
-        return Response({'detail':"Invalid Request"})
+        return Response({'detail':"Invalid Request"},status=HTTP_400_BAD_REQUEST)
     user = authenticate(request,username=username,password=password)
     if user is None:
         return Response({"error":"Invalid User Credentials"},status=HTTP_400_BAD_REQUEST)
