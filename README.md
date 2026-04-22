@@ -53,3 +53,6 @@ This project demonstrates:
 - API development
 - Content management strategy
 - Real-world architecture decisions
+
+## Access
+Backend server running live on 13.48.26.252 (aws ec2 instance)
