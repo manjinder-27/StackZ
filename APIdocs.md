@@ -46,7 +46,7 @@
 #### Parameters :
 - access token (Authorization Header)
 #### Expected Responses :
-- 200 - Success (returns username and full_name)
+- 200 - Success (returns username, full_name and email)
 - 401 - Unauthorized (missing,expired or invalid access token)
 
 ### 5. `POST` `/user/progress/`
