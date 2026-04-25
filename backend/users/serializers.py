@@ -22,7 +22,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'full_name']
+        fields = ['username', 'full_name','email']
 
 class ProgressSerializer(serializers.ModelSerializer):
     class Meta:
