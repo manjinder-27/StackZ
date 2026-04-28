@@ -61,13 +61,13 @@ def update_progress(request):
         module_completed_index = request.data['module_index']
         last_progress = UserProgress.objects.filter(user=user,course_id=course_id).first()
         if last_progress is None: #User has no progress yet
-            if module_completed_index != 0: #But trying to update other than first module
+            if module_completed_index != 1: #But trying to update other than first module
                 return Response({'detail':'Invalid/Tampered Request'},status=status.HTTP_400_BAD_REQUEST)
             else:
-                progress = UserProgress(user=user,course_id=course_id,module_index=0)
+                progress = UserProgress(user=user,course_id=course_id,module_index=1)
                 progress.save()
                 return Response({'detail':'Progress Updated'},status=status.HTTP_204_NO_CONTENT)
-        if last_progress.module_index != (module_completed_index - 1): #last module not completed
+        if last_progress.module_index < (module_completed_index - 1): #last module not completed
             return Response({'detail':'Invalid/Tampered Request'},status=status.HTTP_400_BAD_REQUEST)
         else:
             last_progress.module_index += 1

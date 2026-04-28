@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST,HTTP_200_OK,HTTP_500_INTERNAL_SERVER_ERROR
 from .serializers import ModuleSerializer,CourseSerializer,NewCourseSerializer,NewModuleSerializer
 from .models import Course,Module
+import json
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -50,9 +51,10 @@ def get_module_data(request,module_id):
     try:
         path = 'courses-content/quizes/' if module.is_quiz else 'courses-content/lessons/'
         with open(path+str(module.filename)+'.json','r')as f:
-            content = f.read()
+            content = json.load(f)
             f.close()
-    except:
+    except Exception as e:
+        print(e)
         return Response({'detail':'Internal Server Error'},status=HTTP_500_INTERNAL_SERVER_ERROR)
     data = {
         'module_id':module_id,
@@ -106,11 +108,12 @@ def add_module(request):
             module = Module.objects.get(course=course,index=module_index)
             file_dir = 'courses-content/quizes/' if module_isquiz else 'courses-content/lessons/'
             file_path = file_dir + str(module.filename) + '.json'
-            with open(file_path,'w') as f:
-                f.write(str(module_content))
+            with open(file_path,'w', encoding='utf-8') as f:
+                json.dump(module_content, f)
                 f.close()
             return Response({'detail':'Module Added'},status=HTTP_200_OK)
         else:
             return Response({'detail':'Invalid Request'},status=HTTP_400_BAD_REQUEST)
-    except:
+    except Exception as e:
+        print(e)
         return Response({'detail':'Internal Server Error'},status=HTTP_500_INTERNAL_SERVER_ERROR)
