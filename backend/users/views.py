@@ -67,12 +67,12 @@ def update_progress(request):
                 progress = UserProgress(user=user,course_id=course_id,module_index=1)
                 progress.save()
                 return Response({'detail':'Progress Updated'},status=status.HTTP_204_NO_CONTENT)
-        if last_progress.module_index < (module_completed_index - 1): #last module not completed
-            return Response({'detail':'Invalid/Tampered Request'},status=status.HTTP_400_BAD_REQUEST)
-        else:
+        if last_progress.module_index == (module_completed_index -1):
             last_progress.module_index += 1
             last_progress.save()
             return Response({'detail':'Progress Updated'},status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response({'detail':'Invalid/Tampered Request'},status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response({'detail':'Invalid Request'},status=status.HTTP_400_BAD_REQUEST)
 

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:stackz/services/storage_service.dart';
 
 class NetworkService {
-  static const String _domain = "127.0.0.1:8000";
+  static const String _domain = "13.48.26.252";
 
   static Future<int> authenticateUser(String username, String password) async {
     var url = Uri.http(_domain, 'user/login/');
@@ -205,7 +205,7 @@ class NetworkService {
         'module_index': moduleIndex,
       }),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 204) {
       return response.statusCode;
     }
     if (refreshed){
