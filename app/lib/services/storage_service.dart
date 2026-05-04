@@ -21,4 +21,8 @@ class StorageService {
     return await _storage.read(key: _rKey);
   }
 
+  static Future<void> removeKeys() async {
+    _storage.deleteAll();
+  }
+
 }
